@@ -16,11 +16,15 @@
   "dependencies": {
     "chalk": "^4.1.1",
     "node-fetch": "^2.6.1",
+    "sequelize": "^6.6.5",
     "vorpal": "^1.12.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/node": "^16.3.2",
+    "@types/sequelize": "^4.28.10",
+    "@types/sqlite3": "^3.1.7",
+    "@types/validator": "^13.6.3",
     "@types/vorpal": "^1.12.1",
     "jest": "^27.0.6",
     "ts-jest": "^27.0.3",
