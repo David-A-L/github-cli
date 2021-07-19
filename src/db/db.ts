@@ -1,4 +1,4 @@
-import { sequelize } from "./orm";
+import { Pull, sequelize } from "./orm";
 
 const init = async () => {
     return sequelize.sync();
@@ -12,4 +12,14 @@ const reset = async () => {
     return sequelize.sync({ force: true });
 }
 
-export { init, close, reset };
+const savePulls = async (pulls: any) => {
+    return Pull.bulkCreate(pulls.map((p: any) => {
+        return { id: p.id, data: p };
+    }));
+}
+
+const getPulls = async () => {
+    return Pull.findAll();
+}
+
+export { init, close, reset, savePulls, getPulls };

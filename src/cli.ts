@@ -1,16 +1,41 @@
 // @ts-nocheck
 import chalk from 'chalk';
 import Vorpal from 'vorpal';
-import { setCredentials, setOrg } from './api/github-wrapper';
+import * as api from './api/github-wrapper';
 import * as db from './db/db';
 const vorpal = new Vorpal();
 
 vorpal
     .command('refresh', 'Refreshes pull info from github')
-    .action((args: any, callback: () => void) => {
-        this.log(chalk.green('Refreshed pulls'));
+    .action(async function (args: any, callback: () => void) {
+        try {
+            await db.reset();
+            const pulls = await api.getOrgPulls();
+            if (!pulls) throw new Error('Could not fetch pulls');
+            await db.savePulls(pulls);
+            this.log(chalk.green(`Refreshed ${pulls.length} pulls`));
+
+        } catch (err) {
+            this.log(chalk.red(err));
+        }
         callback();
     });
+
+vorpal
+    .command('dump', 'Output all saved pulls')
+    .action(async function (args: any, callback: () => void) {
+        try {
+            const pulls = await db.getPulls();
+            this.log(pulls.map(p => {
+                return { id: p.id, link: p.data.url, title: p.data.title };
+            }));
+
+        } catch (err) {
+            this.log(chalk.red(err));
+        }
+        callback();
+    });
+
 
 vorpal
     .command('auth', 'Optionally use your github credentials')
@@ -27,7 +52,7 @@ vorpal
                 message: chalk.yellow('personal access token: ')
             }
         ], answers => {
-            setCredentials(answers.username, answers.pat);
+            api.setCredentials(answers.username, answers.pat);
             this.log(chalk.green('Credentials saved'));
             callback();
         });
@@ -44,14 +69,13 @@ vorpal
             }
         ], async answers => {
             await db.reset();
-            setOrg(answers.org);
+            api.setOrg(answers.org);
             this.log(chalk.green(`Targeting repos under ${answers.org}`));
             callback();
         });
     });
 
 vorpal.find('exit').remove();
-
 vorpal
     .command('exit', 'Exits the app')
     .action(async function (args: any, callback: () => void) {
