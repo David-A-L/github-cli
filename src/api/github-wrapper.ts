@@ -1,5 +1,3 @@
-// TODO get https://api.github.com/orgs/ramda/repos
-//  get all pulls https://api.github.com/repos/ramda/{repo}/pulls
 import fetch, { Headers } from 'node-fetch';
 
 
