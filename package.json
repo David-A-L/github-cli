@@ -17,6 +17,7 @@
     "@types/node-fetch": "^2.5.11",
     "chalk": "^4.1.1",
     "node-fetch": "^2.6.1",
+    "parse-link-header": "^1.0.1",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2",
     "vorpal": "^1.12.0"
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/node": "^16.3.2",
+    "@types/parse-link-header": "^1.0.0",
     "@types/sequelize": "^4.28.10",
     "@types/validator": "^13.6.3",
     "@types/vorpal": "^1.12.1",
